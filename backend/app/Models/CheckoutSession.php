@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
+#[TypeScript]
 class CheckoutSession extends Model
 {
     protected $fillable = [
@@ -23,23 +25,5 @@ class CheckoutSession extends Model
     public function postcards(): HasMany
     {
         return $this->hasMany(Postcard::class);
-    }
-
-    public static function findOrCreatePendingForUser(int $userId): self
-    {
-        // First try to find an existing pending session
-        $existingSession = self::where('user_id', $userId)
-            ->where('status', 'pending')
-            ->first();
-
-        if ($existingSession) {
-            return $existingSession;
-        }
-
-        // Create a new pending session
-        return self::create([
-            'user_id' => $userId,
-            'status' => 'pending'
-        ]);
     }
 }

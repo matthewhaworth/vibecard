@@ -14,7 +14,7 @@ class CheckoutSessionController extends Controller
     {
         $isAdmin = $request->user()->type === 'admin';
 
-        Log::info('CheckoutSessionController: findOrCreate called', [
+        Log::info('CheckoutSessionController', [
             'user_id' => $request->user()->id,
             'is_admin' => $isAdmin,
         ]);
@@ -23,8 +23,14 @@ class CheckoutSessionController extends Controller
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
-        $checkoutSession = CheckoutSession::where('user_id', $request->user()->id)->firstOrFail();
+        Log::info('CheckoutSessionController', [
+            'user_id' => $request->json('userId')
+        ]);
 
-        return response()->json($checkoutSession);
+        $checkoutSession = CheckoutSession::where('user_id', $request->json('userId'))
+            ->where('status', 'pending')
+            ->firstOrFail();
+
+        return response()->json($checkoutSession->with('postcards')->first(), 200);
     }
 }

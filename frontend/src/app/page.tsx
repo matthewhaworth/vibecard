@@ -1,9 +1,7 @@
-import {createClient} from "@/utils/supabase/server";
-import Link from "next/link";
+import Start from "@/components/Start";
 
-export default async function Home() {
-    return <>
-        <p>this is the homepage, needs marketing material</p>
-        <Link href="/start">Start</Link>
-    </>;
+export default function StartPage() {
+    console.log("rerunning page")
+
+    return <Start />
 }

@@ -13,7 +13,6 @@ class OtpController extends Controller
     {
         $request->validate(['email' => 'required|email']);
 
-
         $user = User::firstOrCreate([
             'email' => $request->email
         ], [
@@ -57,6 +56,6 @@ class OtpController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        return response()->json(['message' => 'Authenticated']);
+        return response()->json($user);
     }
 }

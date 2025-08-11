@@ -42,4 +42,7 @@ return [
         'scheme' => 'https',
     ],
 
+    'openai' => [
+        'key' => env('OPENAI_API_KEY'),
+    ],
 ];

@@ -20,6 +20,7 @@ return new class extends Migration
                 ->onDelete('cascade');
 
             $table->string('prompt');
+            $table->string('message')->nullable();
             $table->string('image_url')->nullable();
             $table->string('pdf_url')->nullable();
 

@@ -1,6 +1,7 @@
+import PostcardPreview from "@/components/PostcardPreview";
 
 export default function PreviewPage() {
     // This is the main entry point for postcard preview
     // All preview flow should go through the PostcardPreview component
-    return <>Preview</>
+    return <PostcardPreview />
 }
