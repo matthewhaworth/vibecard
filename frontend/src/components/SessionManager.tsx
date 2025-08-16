@@ -13,19 +13,28 @@ export function SessionManager({ children }: { children: React.ReactNode }) {
             return; // Don't run the effect if loading
         }
 
+        if (window.location.pathname === '/payment-response') {
+            return;
+        }
+
         if (!user && window.location.pathname !== '/') {
             // redirect to home if not logged in
             redirect('/');
         }
 
-        if (user && session && session.payment_reference === null) {
+        if (user && session && !session.paid) {
             // only redirect if not on the preview page
             if (window.location.pathname !== '/preview') {
                 redirect('/preview');
             }
         }
 
-
+        if (user && session && session.paid) {
+            // redirect to checkout if user is logged in and has a session with payment reference
+            if (window.location.pathname !== '/generate') {
+                redirect('/generate');
+            }
+        }
 
     }, [user, session, isUserLoading, isSessionLoading]);
 

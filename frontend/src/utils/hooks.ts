@@ -1,6 +1,7 @@
 import useSWR from "swr";
 import Cookies from "js-cookie";
 import useSWRMutation from "swr/mutation";
+import {CheckoutSession} from "@/lib/types";
 
 export const LARAVEL_API_URL = process.env.LARAVEL_API_URL || 'http://localhost:8000'
 
@@ -94,7 +95,7 @@ export function useAuth() {
     }
 }
 
-const fetchCheckoutSession = async (url: string) => {
+const fetchCheckoutSession = async (url: string): Promise<CheckoutSession> => {
     const res = await fetch(`${LARAVEL_API_URL}/${url}`, {
         credentials: 'include',
         headers: {
@@ -109,28 +110,51 @@ const fetchCheckoutSession = async (url: string) => {
         error.info = await res.json()
         error.status = res.status
         if (res.status === 401) {
-            return { checkoutSession: undefined };
+            return undefined;
         }
 
         throw error
     }
 
-    return {
-        checkoutSession: await res.json()
-    };
+    return await res.json();
 }
 
 export function useCheckoutSession(){
     const {user} = useAuth();
 
-    const { data, error, isLoading, mutate } = useSWR(
+    console.log('user', user);
+    const { data, error, isLoading, mutate } = useSWR<CheckoutSession | undefined>(
         user ? 'checkout-session' : null,
         fetchCheckoutSession,
-        { revalidateOnFocus: false }
+        {
+            revalidateOnFocus: false,
+            refreshInterval: (latestData: CheckoutSession | undefined) => {
+                if (!latestData) {
+                    console.log('No user or session data available, stopping polling');
+                    return 0;
+                }
+
+                if (latestData.postcards.length === 0) {
+                    console.log('No postcards in session, stopping polling');
+                    return 0;
+                }
+
+                // stop polling if all images a ready
+                if (latestData.postcards.every(postcard => postcard.image_url)) {
+                    console.log('All postcards are ready, stopping polling');
+                    return 0;
+                }
+
+                console.log('Polling for checkout session updates');
+                return 3000;
+            },
+
+        }
     );
+    console.log('checkout', data);
 
     return {
-        session: data?.checkoutSession,
+        session: data,
         isLoading,
         isError: error,
         mutate
@@ -166,4 +190,62 @@ export const useCreateCheckoutSession = () => {
         trigger,
         isMutating,
     }
+}
+
+const fetchPaymentIntent = async () => {
+    const csrfToken = await csrf();
+    const res = await fetch(`${LARAVEL_API_URL}/payment-intent`, {
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            'X-XSRF-TOKEN': csrfToken
+        },
+        method: 'POST',
+        body: JSON.stringify({}),
+    });
+
+    if (!res.ok) {
+        const error: any = new Error('Failed to create payment intent')
+        error.info = await res.json()
+        error.status = res.status
+        throw error
+    }
+
+    return res.json();
+}
+
+export const usePaymentIntent = () => {
+    const { user } = useAuth();
+    const { session } = useCheckoutSession();
+    
+    const { data, error, isLoading, mutate } = useSWR(
+        user && session ? 'payment-intent' : null,
+        () => fetchPaymentIntent(),
+        { revalidateOnFocus: false }
+    );
+
+    return {
+        clientSecret: data?.clientSecret,
+        isLoading,
+        isError: error,
+        mutate
+    }
+}
+
+export const createPostcard = async (prompt: string) => {
+    const csrfToken = await csrf();
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/postcards`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'X-XSRF-TOKEN': csrfToken,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({ prompt }),
+    })
+
+    return await response.json();
 }

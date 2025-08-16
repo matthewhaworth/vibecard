@@ -1,40 +1,58 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type {Metadata} from "next";
+import {Geist, Geist_Mono} from "next/font/google";
 import "./globals.css";
 import {SessionManager} from "@/components/SessionManager";
+import {Montserrat} from "next/font/google"
+import {Open_Sans} from "next/font/google"
+import "./globals.css"
+import ParallaxWrapper from "@/components/ParallaxWrapper";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+const montserrat = Montserrat({
+    subsets: ["latin"],
+    display: "swap",
+    variable: "--font-montserrat",
+    weight: ["400", "600", "700", "900"],
+})
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const openSans = Open_Sans({
+    subsets: ["latin"],
+    display: "swap",
+    variable: "--font-open-sans",
+    weight: ["400", "500", "600"],
+})
 
 export const metadata: Metadata = {
-  title: "Vibecard",
-  description: "Generate AI postcards",
+    title: "Vibecard",
+    description: "Generate AI postcards",
 };
 
 export default function RootLayout({
-  children,
+   children,
 }: Readonly<{
-  children: React.ReactNode;
+    children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <div className={'mx-auto font-bold mt-6 text-center text-3xl'}>vibecard</div>
-        <div className={'max-w-2xl mx-auto mt-12'}>
-          <SessionManager>
-            {children}
-          </SessionManager>
+    return (
+        <html lang="en">
+        <body
+            className={`${montserrat.variable} ${openSans.variable} antialiased`}
+        >
+        <div className={'pt-12'}>
+            <ParallaxWrapper>
+                <div className="text-center mb-8">
+                    <h1 className="font-serif font-black text-5xl md:text-6xl text-foreground tracking-tight">
+                        vibe
+                        <span className="text-primary">card</span>
+                    </h1>
+                    <div className="w-24 h-1 bg-gradient-to-r from-foreground to-primary mx-auto mt-2 rounded-full"></div>
+                </div>
+                <div className={'max-w-2xl mx-auto mt-12'}>
+                    <SessionManager>
+                        {children}
+                    </SessionManager>
+                </div>
+            </ParallaxWrapper>
         </div>
-      </body>
-    </html>
-  );
+        </body>
+        </html>
+    );
 }

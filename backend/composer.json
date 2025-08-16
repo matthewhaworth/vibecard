@@ -23,6 +23,7 @@
         "spatie/laravel-one-time-passwords": "^1.0",
         "spatie/laravel-typescript-transformer": "^2.5",
         "spatie/typescript-transformer": "^2.5",
+        "stripe/stripe-php": "^17.5",
         "symfony/http-client": "^7.3",
         "symfony/mailgun-mailer": "^7.3"
     },

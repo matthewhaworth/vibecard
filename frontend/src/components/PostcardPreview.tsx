@@ -55,14 +55,28 @@ export default function PostcardPreview() {
     }
 
     return (
-        <div>
-            <h1>Postcard Preview</h1>
+        <div className="flex flex-col items-center p-6">
+            <h1 className="text-2xl font-bold mb-6">Postcard Preview</h1>
             {postcard.image_url ? (
-                <img src={postcard.image_url} alt="Postcard Preview" />
+                <>
+                    <div className="mb-6">
+                        <img 
+                            src={postcard.image_url} 
+                            alt="Postcard Preview" 
+                            className="max-w-full rounded-lg shadow-lg"
+                        />
+                    </div>
+                    <button
+                        onClick={() => router.push('/payment')}
+                        className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75"
+                    >
+                        Continue to Payment
+                    </button>
+                </>
             ) : (
-                <div>
-                    <p>Your postcard is being generated. Please wait.</p>
-                    {/* You can add a loading spinner here */}
+                <div className="text-center">
+                    <p className="mb-4">Your postcard is being generated. Please wait.</p>
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900 mx-auto"></div>
                 </div>
             )}
         </div>

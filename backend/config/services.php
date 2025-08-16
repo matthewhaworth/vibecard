@@ -45,4 +45,14 @@ return [
     'openai' => [
         'key' => env('OPENAI_API_KEY'),
     ],
+
+    'stripe' => [
+        'key' => env('STRIPE_KEY'),
+        'secret' => env('STRIPE_SECRET_KEY'),
+        'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+    ],
+
+    'vibecard' => [
+        'frontend_url' => env('VIBECARD_FRONTEND_URL', 'https://vibecard.co.uk')
+    ],
 ];
