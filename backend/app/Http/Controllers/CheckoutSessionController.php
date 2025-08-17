@@ -69,7 +69,7 @@ class CheckoutSessionController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        $chosenPostcardId = $request->json('postcard_id');
+        $chosenPostcardId = $request->json('chosenPostcardId');
 
         // Find the checkout session for the authenticated user
         $checkoutSession = $user->checkoutSessions()
@@ -149,6 +149,39 @@ class CheckoutSessionController extends Controller
             Log::error('Stripe error: ' . $e->getMessage());
             return response()->json(['error' => 'Failed to create payment intent'], 500);
         }
+    }
+
+    public function updateShippingAddress(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        // Find the checkout session for the authenticated user
+        $checkoutSession = $user->checkoutSessions()
+            ->where('status', 'pending')
+            ->first();
+
+        if (!$checkoutSession) {
+            return response()->json(['error' => 'Checkout session not found'], 404);
+        }
+
+        // Validate the request data
+        $validated = $request->validate([
+            'shipping_name' => 'required|string|max:255',
+            'shipping_address_line1' => 'required|string|max:255',
+            'shipping_address_line2' => 'nullable|string|max:255',
+            'shipping_address_city' => 'required|string|max:255',
+            'shipping_address_postal_code' => 'required|string|max:20',
+            'shipping_address_country' => 'required|string|max:255',
+        ]);
+
+        // Update the checkout session with the new shipping address
+        $checkoutSession->update($validated);
+
+        return response()->json($checkoutSession->load('postcards'));
     }
 
     public function handleStripeWebhook(Request $request): JsonResponse

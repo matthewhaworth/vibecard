@@ -21,6 +21,9 @@ Route::get('/checkout-session', [CheckoutSessionController::class, 'find'])
 Route::post('/checkout-complete', [CheckoutSessionController::class, 'complete'])
     ->middleware('auth:sanctum');
 
+Route::post('/update-shipping-address', [CheckoutSessionController::class, 'updateShippingAddress'])
+    ->middleware('auth:sanctum');
+
 Route::post('/payment-intent', [CheckoutSessionController::class, 'createPaymentIntent'])
     ->middleware('auth:sanctum');
 

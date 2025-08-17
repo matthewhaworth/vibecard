@@ -3,8 +3,6 @@
 namespace App\Jobs;
 
 use App\Models\Postcard;
-use ClickSend\Api\PostPostcardApi;
-use ClickSend\Model\PostPostcard;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 

@@ -273,3 +273,38 @@ export const completeOrder = async (sessionId: number, chosenPostcardId: number)
 
     return await response.json();
 }
+
+export const updateShippingAddress = async (addressData: {
+    name: string;
+    line1: string;
+    line2?: string;
+    city: string;
+    postalCode: string;
+    country: string;
+}) => {
+    const csrfToken = await csrf();
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/update-shipping-address`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'X-XSRF-TOKEN': csrfToken,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+            shipping_name: addressData.name,
+            shipping_address_line1: addressData.line1,
+            shipping_address_line2: addressData.line2 || '',
+            shipping_address_city: addressData.city,
+            shipping_address_postal_code: addressData.postalCode,
+            shipping_address_country: addressData.country
+        }),
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to update shipping address');
+    }
+
+    return await response.json();
+}
