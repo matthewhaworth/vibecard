@@ -5,7 +5,7 @@ import {useEffect, useState} from "react";
 const examplePostcards = [
     {
         id: 1,
-        image: "/happy-birthday-card.png",
+        image: "/cards/image-1.jpeg",
         title: "Happy Birthday",
         x: 10,
         y: 20,
@@ -14,7 +14,7 @@ const examplePostcards = [
     },
     {
         id: 2,
-        image: "/placeholder-6jiac.png",
+        image: "/cards/image-2.jpeg",
         title: "Happy Father's Day",
         x: 70,
         y: 15,
@@ -23,7 +23,7 @@ const examplePostcards = [
     },
     {
         id: 3,
-        image: "/placeholder-vn3gf.png",
+        image: "/cards/image-3.jpeg",
         title: "Congratulations",
         x: 15,
         y: 60,
@@ -32,7 +32,7 @@ const examplePostcards = [
     },
     {
         id: 4,
-        image: "/happy-anniversary-card.png",
+        image: "/cards/image-4.jpeg",
         title: "Happy Anniversary",
         x: 80,
         y: 70,
@@ -41,7 +41,7 @@ const examplePostcards = [
     },
     {
         id: 5,
-        image: "/thank-you-flowers.png",
+        image: "/cards/image-5.jpeg",
         title: "Thank You",
         x: 45,
         y: 35,
@@ -50,7 +50,7 @@ const examplePostcards = [
     },
     {
         id: 6,
-        image: "/get-well-soon-card.png",
+        image: "/cards/image-6.jpeg",
         title: "Get Well Soon",
         x: 25,
         y: 80,

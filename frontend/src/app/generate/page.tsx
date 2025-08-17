@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import {createPostcard, useCheckoutSession} from '@/utils/hooks'
+import {completeOrder, createPostcard, useCheckoutSession} from '@/utils/hooks'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
@@ -14,16 +14,16 @@ export default function GeneratePage() {
 
     const [prompt, setPrompt] = useState('')
     const [isLoading, setIsLoading] = useState(false)
+    const [message, setMessage] = useState('')
     const [selectedPostcardId, setSelectedPostcardId] = useState<number | null>(null)
 
-
     const shippingAddress = <>
-        {checkoutSession.shipping_name || ''},<br />
-        {checkoutSession.shipping_address_line1 || ''},<br />
-        {checkoutSession.shipping_address_line2 &&  <>{checkoutSession.shipping_address_line2 || ''},<br /></> || ''}
-        {checkoutSession.shipping_address_city || ''},<br />
-        {checkoutSession.shipping_address_postal_code || ''},<br />
-        {checkoutSession.shipping_address_country || ''}<br />
+        {checkoutSession?.shipping_name || ''},<br />
+        {checkoutSession?.shipping_address_line1 || ''},<br />
+        {checkoutSession?.shipping_address_line2 &&  <>{checkoutSession?.shipping_address_line2 || ''},<br /></> || ''}
+        {checkoutSession?.shipping_address_city || ''},<br />
+        {checkoutSession?.shipping_address_postal_code || ''},<br />
+        {checkoutSession?.shipping_address_country || ''}<br />
     </>
     
     if (!checkoutSession) {
@@ -54,11 +54,15 @@ export default function GeneratePage() {
         setSelectedPostcardId(postcardId)
     }
     
-    const handleSendPostcard = () => {
+    const handleSendPostcard = async () => {
         if (selectedPostcardId) {
-            // In a real app, this would save the selected postcard ID to the checkout session
-            // and redirect to the next step in the checkout flow
-            router.push('/payment')
+            setIsLoading(true);
+            await completeOrder(message, selectedPostcardId);
+
+            await refreshSession();
+
+            setIsLoading(false);
+            router.push('/complete')
         }
     }
     

@@ -55,4 +55,9 @@ return [
     'vibecard' => [
         'frontend_url' => env('VIBECARD_FRONTEND_URL', 'https://vibecard.co.uk')
     ],
+
+    'clicksend' => [
+        'username' => env('CLICKSEND_USERNAME'),
+        'api_key' => env('CLICKSEND_API_KEY'),
+    ],
 ];

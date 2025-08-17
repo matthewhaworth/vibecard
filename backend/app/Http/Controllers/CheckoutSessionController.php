@@ -61,6 +61,46 @@ class CheckoutSessionController extends Controller
         return response()->json($checkoutSession->with('postcards')->first(), 201);
     }
 
+    public function complete(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $chosenPostcardId = $request->json('postcard_id');
+
+        // Find the checkout session for the authenticated user
+        $checkoutSession = $user->checkoutSessions()
+            ->where('status', 'pending')
+            ->with('postcards')
+            ->first();
+
+        if (!$checkoutSession) {
+            return response()->json(['error' => 'Checkout session not found'], 404);
+        }
+
+        // Find the chosen postcard
+        $postcard = $checkoutSession->postcards()->find($chosenPostcardId);
+        if (!$postcard) {
+            return response()->json(['error' => 'Postcard not found'], 404);
+        }
+
+        // Update the postcard with the customer's message
+        $postcard->update([
+            'message' => $request->json('message', '')
+        ]);
+
+        // If the postcard is not already processed, dispatch the job to process it
+        \App\Jobs\SendPostcard::dispatch($postcard);
+
+        // Update the checkout session status to completed
+        $checkoutSession->update(['status' => 'completed']);
+
+        return response()->json($checkoutSession->load('postcards'));
+    }
+
     public function createPaymentIntent(Request $request): JsonResponse
     {
         $user = $request->user();

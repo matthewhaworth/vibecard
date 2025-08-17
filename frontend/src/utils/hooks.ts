@@ -249,3 +249,27 @@ export const createPostcard = async (prompt: string) => {
 
     return await response.json();
 }
+
+export const completeOrder = async (sessionId: number, chosenPostcardId: number) => {
+    const csrfToken = await csrf();
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/checkout-complete`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'X-XSRF-TOKEN': csrfToken,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+            sessionId,
+            chosenPostcardId
+        }),
+    })
+
+    if (!response.ok) {
+        throw new Error('Failed to complete order');
+    }
+
+    return await response.json();
+}

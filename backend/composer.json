@@ -11,6 +11,7 @@
     "require": {
         "php": "^8.2",
         "barryvdh/laravel-dompdf": "^3.1",
+        "clicksend/clicksend-php": "^5.0",
         "intervention/image": "^3.11",
         "intervention/image-laravel": "^1.5",
         "laravel/fortify": "^1.27",

@@ -34,6 +34,19 @@ class ProcessPostcard implements ShouldQueue
      */
     public function handle(): void
     {
+        if ($this->postcard->prompt === 'test') {
+            $this->postcard->image_url = 'https://vibecard.s3.eu-west-2.amazonaws.com/postcards/6d6a51c9-fe99-4e14-8c8a-41d6353206c0/image.jpeg';
+            $this->postcard->pdf_url = 'https://vibecard.s3.eu-west-2.amazonaws.com/postcards/6d6a51c9-fe99-4e14-8c8a-41d6353206c0/postcard.pdf';
+            $this->postcard->save();
+
+            Log::info('Test postcard processed successfully', [
+                'postcard_id' => $this->postcard->id,
+                'image_url' => $this->postcard->image_url,
+                'pdf_url' => $this->postcard->pdf_url
+            ]);
+            return;
+        }
+
         try {
             Log::info('Starting postcard processing', [
                 'postcard_id' => $this->postcard->id,
@@ -51,8 +64,6 @@ class ProcessPostcard implements ShouldQueue
 
             $prompt .= "Here is the customer's prompt: {$this->postcard->prompt}";
 
-            var_dump($prompt);
-
             $result = $client->images()->create([
                 'model' => 'gpt-image-1',
                 'prompt' => $prompt,
@@ -60,10 +71,7 @@ class ProcessPostcard implements ShouldQueue
                 'quality' => 'medium'
             ]);
 
-            var_dump($result);
             $imageBase64 = $result->data[0]->b64_json ?? null;
-            var_dump($result->data[0], $imageBase64);
-
             if ($imageBase64) {
                 // Decode the base64 string
                 $imageData = base64_decode($imageBase64);
@@ -121,8 +129,6 @@ class ProcessPostcard implements ShouldQueue
                     ]);
                     throw $e;
                 }
-
-                var_dump($response);
 
                 try {
                     $imageS3Url = Storage::disk('s3')->url($imagePath);

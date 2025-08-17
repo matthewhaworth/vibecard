@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "69193317b8dbc6aabf0031c353cef9d0",
+    "content-hash": "194ce30ee138831f9b225bb5783ec18a",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -416,6 +416,61 @@
                 }
             ],
             "time": "2024-02-09T16:56:22+00:00"
+        },
+        {
+            "name": "clicksend/clicksend-php",
+            "version": "v5.0.81",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ClickSend/clicksend-php.git",
+                "reference": "d642c1cbde5e7e9e247fb65adc2eeec4019a4f82"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ClickSend/clicksend-php/zipball/d642c1cbde5e7e9e247fb65adc2eeec4019a4f82",
+                "reference": "d642c1cbde5e7e9e247fb65adc2eeec4019a4f82",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "guzzlehttp/guzzle": "^6.2|^7.3",
+                "php": ">=5.5"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "~2.12",
+                "phpunit/phpunit": "^4.8",
+                "squizlabs/php_codesniffer": "~2.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ClickSend\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Swagger and contributors",
+                    "homepage": "https://github.com/swagger-api/swagger-codegen"
+                }
+            ],
+            "homepage": "http://swagger.io",
+            "keywords": [
+                "api",
+                "php",
+                "sdk",
+                "swagger"
+            ],
+            "support": {
+                "issues": "https://github.com/ClickSend/clicksend-php/issues",
+                "source": "https://github.com/ClickSend/clicksend-php/tree/v5.0.81"
+            },
+            "time": "2025-03-19T01:23:20+00:00"
         },
         {
             "name": "dasprid/enum",
