@@ -25,9 +25,19 @@ export default function Start() {
         await requestOtp(email);
     }
 
-    const onContinue = async () => {
+    const onContinueLoggedOut = async () => {
         setHasRequestedOtp(false)
         await loginWithOtp(email, oneTimePassword);
+        await trigger({prompt})
+    }
+
+    if (isUserLoading || isCustomerSessionLoading) {
+        console.log('loading', isUserLoading, 'error', isError);
+        return <div>Loading...</div>;
+    }
+
+    const onContinueLoggedIn = async () => {
+        setHasRequestedOtp(false)
         await trigger({prompt})
     }
 
@@ -72,7 +82,7 @@ export default function Start() {
                 </div>
             </div>}
 
-            {!hasRequestedOtp && <Button
+            {(!hasRequestedOtp && !user) && <Button
                 className={'hover:cursor-pointer'}
                 type='button'
                 disabled={(!user && !email.trim()) || !prompt.trim() || isUserLoading || isCustomerSessionLoading}
@@ -81,13 +91,13 @@ export default function Start() {
                     <><Loader2Icon className="animate-spin" /> Please wait</> : 'Continue'}
             </Button>}
 
-            {hasRequestedOtp && <Button
+            {(hasRequestedOtp || user) && <Button
                 className={'hover:cursor-pointer'}
                 type='button'
-                disabled={isUserLoading || isCustomerSessionLoading || oneTimePassword.length !== 6}
-                onClick={() => onContinue()}>
+                disabled={isUserLoading || isCustomerSessionLoading || (!user && oneTimePassword.length !== 6)}
+                onClick={user ? () => onContinueLoggedIn() : () => onContinueLoggedOut()}>
                 {(isUserLoading || isCustomerSessionLoading) ?
-                    <><Loader2Icon className="animate-spin" /> Please wait</> : 'Login'}
+                    <><Loader2Icon className="animate-spin" /> Please wait</> : user ? 'Continue' : 'Login & Continue'}
             </Button>}
 
             <Button type={'button'} onClick={() => console.log(user)}>

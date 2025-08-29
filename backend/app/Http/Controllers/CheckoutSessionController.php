@@ -27,11 +27,11 @@ class CheckoutSessionController extends Controller
             ->with('postcards')
             ->first();
 
-        Log::info("checkout session {$checkoutSession->id}");
-
         if (!$checkoutSession) {
             return response()->json(['error' => 'Checkout session not found'], 404);
         }
+
+        Log::info("checkout session {$checkoutSession->id}");
 
         return response()->json($checkoutSession);
     }
@@ -123,6 +123,24 @@ class CheckoutSessionController extends Controller
         $stripe = new StripeClient(config('services.stripe.secret'));
 
         try {
+            if ($checkoutSession->payment_reference) {
+                // If a payment intent already exists, retrieve it
+                $existingPaymentIntent = $stripe->paymentIntents->retrieve($checkoutSession->payment_reference);
+                if ($checkoutSession->paid) {
+                    return response()->json(['error' => 'Payment already completed'], 400);
+                }
+
+                if (!$checkoutSession->paid && $existingPaymentIntent->status === 'succeeded') {
+                    // Update the checkout session to paid if the payment intent succeeded
+                    $checkoutSession->update(['paid' => true]);
+                    return response()->json(['error' => 'Payment already completed'], 400);
+                }
+
+                return response()->json([
+                    'clientSecret' => $existingPaymentIntent->client_secret,
+                ]);
+            }
+
             // Create a PaymentIntent with the order amount and currency
             $paymentIntent = $stripe->paymentIntents->create([
                 'amount' => 5005, // Amount in cents (e.g., $10.00)

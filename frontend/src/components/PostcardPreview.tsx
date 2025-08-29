@@ -1,8 +1,7 @@
 'use client'
 
 import useSWR from 'swr'
-import { useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import {LARAVEL_API_URL, useCheckoutSession} from "@/utils/hooks";
 
 const fetcher = (url: string) => fetch(url, { credentials: 'include' }).then((res) => res.json())

@@ -13,7 +13,10 @@ export function SessionManager({ children }: { children: React.ReactNode }) {
             return; // Don't run the effect if loading
         }
 
-        if (window.location.pathname === '/payment-response') {
+        if (window.location.pathname === '/payment-response' ||
+            window.location.pathname === '/terms' ||
+            window.location.pathname === '/privacy'
+        ) {
             return;
         }
 
