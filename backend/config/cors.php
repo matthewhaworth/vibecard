@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://localhost:3000','https://vibecard.co.uk', 'https://www.vibecard.co.uk'],
+    'allowed_origins' => [env('VIBECARD_FRONTEND_URL', 'http://localhost:3000')],
 
     'allowed_origins_patterns' => [],
 
