@@ -36,13 +36,13 @@ export default function RootLayout({
         <body
             className={`${montserrat.variable} ${openSans.variable} antialiased bg-gradient-to-b from-gray-50 to-white min-h-screen`}
         >
-        <div className={'pt-12 px-4'}>
-            <div className="text-center mb-10">
-                <a href={'/'} className="font-serif font-black text-5xl md:text-6xl text-foreground tracking-tight transition-transform">
-                    <img src={'/logo-1.webp'} alt={'Vibecard Logo'} className={'inline w-48 -mt-2 mr-2 drop-shadow-sm'}/>
+        <div className={'pt-10 px-4 sm:px-6'}>
+            <div className="text-center mb-6">
+                <a href={'/'} className="font-serif font-black text-5xl md:text-6xl text-foreground tracking-tight transition-transform hover:scale-105">
+                    <img src={'/logo-1.webp'} alt={'Vibecard Logo'} className={'inline w-40 sm:w-48 -mt-2 mr-2 drop-shadow-md'}/>
                 </a>
             </div>
-            <div className={'max-w-2xl mx-auto mt-12 bg-white p-6 rounded-lg shadow-sm border border-gray-100'}>
+            <div className={'max-w-2xl mx-auto mt-8 bg-white p-5 sm:p-6 rounded-lg shadow-sm border border-gray-100'}>
                 <SessionManager>
                     {children}
                 </SessionManager>

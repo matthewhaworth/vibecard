@@ -64,12 +64,29 @@ export default function PaymentFormWrapper() {
 
   return (
     <div className="max-w-md mx-auto">
-      <h1 className="text-2xl font-bold mb-6 text-center">Complete Your Purchase</h1>
+      <h1 className="text-2xl font-bold mb-4 text-center">Complete Your Purchase</h1>
       
-      <div className="mb-6 p-4 bg-gray-50 border border-gray-100 rounded-md text-center">
+      <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-md text-center shadow-sm">
         <p className="text-gray-600 mb-1">Total Amount</p>
         <p className="text-2xl font-semibold text-gray-800">£4.49</p>
         <p className="text-sm text-gray-500 mt-1">Includes postcard printing and delivery</p>
+      </div>
+      
+      <div className="mb-6 flex justify-between items-center px-2">
+        <div className="flex flex-col items-center">
+          <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-sm font-medium">1</div>
+          <p className="text-xs mt-1 text-gray-600">Details</p>
+        </div>
+        <div className="h-1 flex-1 bg-gray-200 mx-2"></div>
+        <div className="flex flex-col items-center">
+          <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-sm font-medium">2</div>
+          <p className="text-xs mt-1 text-gray-600">Payment</p>
+        </div>
+        <div className="h-1 flex-1 bg-gray-200 mx-2"></div>
+        <div className="flex flex-col items-center">
+          <div className="w-8 h-8 rounded-full bg-gray-300 text-white flex items-center justify-center text-sm font-medium">3</div>
+          <p className="text-xs mt-1 text-gray-400">Confirmation</p>
+        </div>
       </div>
       
       {clientSecret && (
@@ -133,13 +150,21 @@ function PaymentForm({ checkoutSession }: { checkoutSession: any }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="p-5 border border-gray-100 rounded-lg bg-white shadow-sm">
-        <h2 className="text-lg font-semibold mb-3 text-gray-800">Shipping Address</h2>
+      <div className="p-5 border border-gray-100 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow">
+        <div className="flex items-center mb-3">
+          <div className="w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs font-medium mr-2">1</div>
+          <h2 className="text-lg font-semibold text-gray-800">Shipping Address</h2>
+        </div>
+        <p className="text-xs text-gray-500 mb-3">Enter the address where you'd like your postcard delivered</p>
         <AddressElement options={{ mode: 'shipping' }} />
       </div>
       
-      <div className="p-5 border border-gray-100 rounded-lg bg-white shadow-sm">
-        <h2 className="text-lg font-semibold mb-3 text-gray-800">Payment Details</h2>
+      <div className="p-5 border border-gray-100 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow">
+        <div className="flex items-center mb-3">
+          <div className="w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs font-medium mr-2">2</div>
+          <h2 className="text-lg font-semibold text-gray-800">Payment Details</h2>
+        </div>
+        <p className="text-xs text-gray-500 mb-3">Secure payment processing by Stripe</p>
         <PaymentElement />
       </div>
       
@@ -152,14 +177,19 @@ function PaymentForm({ checkoutSession }: { checkoutSession: any }) {
       <Button
         type="submit"
         disabled={!stripe || isProcessing}
-        className="hover:cursor-pointer w-full py-6 text-lg font-medium transition-transform"
+        className="hover:cursor-pointer w-full py-6 text-lg font-medium transition-transform hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700"
       >
-        {isProcessing ? 'Processing...' : 'Pay £4.49 Now'}
+        {isProcessing ? 
+          <><Loader2Icon className="animate-spin mr-2" /> Processing...</> : 
+          'Pay £4.49 Now'}
       </Button>
       
-      <p className="text-center text-sm text-gray-500 mt-4">
-        Your card will be charged £4.49 upon submission
-      </p>
+      <div className="flex items-center justify-center space-x-2 mt-4">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-green-500"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        <p className="text-center text-sm text-gray-500">
+          Secure payment - your card will be charged £4.49
+        </p>
+      </div>
     </form>
   )
 }
