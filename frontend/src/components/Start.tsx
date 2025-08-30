@@ -32,7 +32,6 @@ export default function Start() {
     }
 
     if (isUserLoading || isCustomerSessionLoading) {
-        console.log('loading', isUserLoading, 'error', isError);
         return <div>Loading...</div>;
     }
 
@@ -42,7 +41,6 @@ export default function Start() {
     }
 
     if (isUserLoading || isCustomerSessionLoading) {
-        console.log('loading', isUserLoading, 'error', isError);
         return <div>Loading...</div>;
     }
 
@@ -99,10 +97,6 @@ export default function Start() {
                 {(isUserLoading || isCustomerSessionLoading) ?
                     <><Loader2Icon className="animate-spin" /> Please wait</> : user ? 'Continue' : 'Login & Continue'}
             </Button>}
-
-            <Button type={'button'} onClick={() => console.log(user)}>
-                Get User
-            </Button>
         </form>
     )
 }

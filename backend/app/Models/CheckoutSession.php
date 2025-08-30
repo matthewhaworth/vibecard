@@ -16,6 +16,7 @@ class CheckoutSession extends Model
         'payment_reference',
         'status',
         'paid',
+        'chosen_postcard_id',
         'shipping_address_city',
         'shipping_address_country',
         'shipping_address_line1',
@@ -34,5 +35,10 @@ class CheckoutSession extends Model
     public function postcards(): HasMany
     {
         return $this->hasMany(Postcard::class);
+    }
+
+    public function chosenPostcard(): BelongsTo
+    {
+        return $this->belongsTo(Postcard::class, 'chosen_postcard_id');
     }
 }

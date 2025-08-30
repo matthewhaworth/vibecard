@@ -87,7 +87,14 @@ export default function GeneratePostcard() {
     const handleSendPostcard = async () => {
         if (selectedPostcardId) {
             setIsLoading(true);
-            await completeOrder(message, selectedPostcardId);
+            await completeOrder(checkoutSession.id, selectedPostcardId, message);
+
+            // write the checkout session to local storage for the complete page to read
+            localStorage.setItem('lastCheckoutSession', JSON.stringify({
+                ...checkoutSession,
+                chosen_postcard_id: selectedPostcardId,
+                message: message
+            }));
 
             await refreshSession();
 
@@ -331,6 +338,7 @@ export default function GeneratePostcard() {
                         <Button 
                             onClick={handleSendPostcard} 
                             disabled={selectedPostcardId === null}
+                            className={'hover:cursor-pointer'}
                             size="lg"
                         >
                             {selectedPostcardId === null 

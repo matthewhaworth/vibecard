@@ -153,7 +153,7 @@ class ProcessPostcard implements ShouldQueue
 
                 $pdf = PDF::loadView('pdf.postcard', [
                     'image_url' => $image->toDataUri(),
-                    'message' => "This is a long message. I am not sure how long this message can be but I thought I would write a long one to see what the limit is. I am not sure how manay characters I am at, oh, not enough - let's do more. I am listening to a vide oabout the long term dagners of AI and how it could lead to nuclear war which is quite concerning. That said, in the short term I will continue to write code using AI."//$this->postcard->message,
+                    'message' => $this->postcard->message,
                 ])->setPaper('a5', 'landscape');
 
                 $pdfContents = $pdf->output();

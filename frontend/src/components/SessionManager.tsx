@@ -20,7 +20,7 @@ export function SessionManager({ children }: { children: React.ReactNode }) {
             return;
         }
 
-        if (!user && window.location.pathname !== '/') {
+        if ((!user || !session) && window.location.pathname !== '/') {
             // redirect to home if not logged in
             redirect('/');
         }

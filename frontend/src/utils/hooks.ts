@@ -95,8 +95,8 @@ export function useAuth() {
     }
 }
 
-const fetchCheckoutSession = async (url: string): Promise<CheckoutSession> => {
-    const res = await fetch(`${LARAVEL_API_URL}/${url}`, {
+const fetchCheckoutSession = async (url: string): Promise<CheckoutSession|undefined> => {
+    const res = await fetch(`${LARAVEL_API_URL}/checkout-session`, {
         credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
@@ -122,36 +122,26 @@ const fetchCheckoutSession = async (url: string): Promise<CheckoutSession> => {
 export function useCheckoutSession(){
     const {user} = useAuth();
 
-    console.log('user', user);
     const { data, error, isLoading, mutate } = useSWR<CheckoutSession | undefined>(
         user ? 'checkout-session' : null,
         fetchCheckoutSession,
         {
             revalidateOnFocus: false,
             refreshInterval: (latestData: CheckoutSession | undefined) => {
-                if (!latestData) {
-                    console.log('No user or session data available, stopping polling');
-                    return 0;
-                }
-
-                if (latestData.postcards.length === 0) {
-                    console.log('No postcards in session, stopping polling');
+                if (!latestData || latestData.postcards.length === 0) {
                     return 0;
                 }
 
                 // stop polling if all images a ready
                 if (latestData.postcards.every(postcard => postcard.image_url)) {
-                    console.log('All postcards are ready, stopping polling');
                     return 0;
                 }
 
-                console.log('Polling for checkout session updates');
-                return 3000;
+                return 1000;
             },
 
         }
     );
-    console.log('checkout', data);
 
     return {
         session: data,
@@ -192,7 +182,7 @@ export const useCreateCheckoutSession = () => {
     }
 }
 
-const fetchPaymentIntent = async () => {
+export const fetchPaymentIntent = async () => {
     const csrfToken = await csrf();
     const res = await fetch(`${LARAVEL_API_URL}/payment-intent`, {
         credentials: 'include',
@@ -215,24 +205,6 @@ const fetchPaymentIntent = async () => {
     return res.json();
 }
 
-export const usePaymentIntent = () => {
-    const { user } = useAuth();
-    const { session } = useCheckoutSession();
-    
-    const { data, error, isLoading, mutate } = useSWR(
-        user && session ? 'payment-intent' : null,
-        () => fetchPaymentIntent(),
-        { revalidateOnFocus: false }
-    );
-
-    return {
-        clientSecret: data?.clientSecret,
-        isLoading,
-        isError: error,
-        mutate
-    }
-}
-
 export const createPostcard = async (prompt: string) => {
     const csrfToken = await csrf();
 
@@ -250,7 +222,7 @@ export const createPostcard = async (prompt: string) => {
     return await response.json();
 }
 
-export const completeOrder = async (sessionId: number, chosenPostcardId: number) => {
+export const completeOrder = async (sessionId: number, chosenPostcardId: number, message: string) => {
     const csrfToken = await csrf();
 
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/checkout-complete`, {
@@ -263,7 +235,8 @@ export const completeOrder = async (sessionId: number, chosenPostcardId: number)
         },
         body: JSON.stringify({
             sessionId,
-            chosenPostcardId
+            chosenPostcardId,
+            message
         }),
     })
 

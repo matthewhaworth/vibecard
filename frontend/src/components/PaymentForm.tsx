@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import {useEffect, useState} from 'react'
 import { useRouter } from 'next/navigation'
 import { 
   Elements, 
@@ -10,7 +10,8 @@ import {
   useElements 
 } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
-import { useCheckoutSession, usePaymentIntent } from '@/utils/hooks'
+import {fetchPaymentIntent, useCheckoutSession} from '@/utils/hooks'
+import {Button} from "@/components/ui/button";
 
 // Initialize Stripe with your publishable key
 // In a real app, this would be an environment variable
@@ -19,8 +20,29 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY 
 // The wrapper component that provides Stripe context
 export default function PaymentFormWrapper() {
   const { session: checkoutSession } = useCheckoutSession()
-  const { clientSecret, isLoading: isLoadingSecret, isError } = usePaymentIntent()
-  
+  const [ isLoadingSecret, setIsLoadingSecret ] = useState(true);
+  const [ clientSecret, setClientSecret ] = useState<string | null>(null);
+  const [ isError, setIsError ] = useState<any>(null);
+
+  useEffect(() => {
+    const loadPaymentIntent = async () => {
+        try {
+            const response = await fetchPaymentIntent();
+            setClientSecret(response.clientSecret);
+        } catch (error) {
+            setIsError(error);
+            console.error('Error fetching payment intent:', error)
+        } finally {
+            setIsLoadingSecret(false)
+        }
+    }
+
+    if (checkoutSession) {
+        loadPaymentIntent()
+    }
+  }, [checkoutSession]);
+
+
   if (!checkoutSession || isLoadingSecret) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -121,13 +143,13 @@ function PaymentForm({ checkoutSession }: { checkoutSession: any }) {
         </div>
       )}
 
-      <button
+      <Button
         type="submit"
         disabled={!stripe || isProcessing}
-        className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 disabled:opacity-50"
+        className="hover:cursor-pointer w-full"
       >
         {isProcessing ? 'Processing...' : 'Pay Now'}
-      </button>
+      </Button>
     </form>
   )
 }

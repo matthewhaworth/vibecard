@@ -3,6 +3,7 @@
 import useSWR from 'swr'
 import { useRouter } from 'next/navigation'
 import {LARAVEL_API_URL, useCheckoutSession} from "@/utils/hooks";
+import {Button} from "@/components/ui/button";
 
 const fetcher = (url: string) => fetch(url, { credentials: 'include' }).then((res) => res.json())
 
@@ -28,7 +29,7 @@ export default function PostcardPreview() {
                 if (latestData?.image_url || postcardError) {
                     return 0
                 }
-                return 5000 // Poll every 5 seconds
+                return 1000 // Poll every 5 seconds
             },
         }
     )
@@ -65,12 +66,13 @@ export default function PostcardPreview() {
                             className="max-w-full rounded-lg shadow-lg"
                         />
                     </div>
-                    <button
+                    <Button
+                        size={'lg'}
                         onClick={() => router.push('/payment')}
-                        className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75"
+                        className="hover:cursor-pointer"
                     >
                         Continue to Payment
-                    </button>
+                    </Button>
                 </>
             ) : (
                 <div className="text-center">

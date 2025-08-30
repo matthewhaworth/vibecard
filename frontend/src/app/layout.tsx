@@ -1,12 +1,11 @@
 import type {Metadata} from "next";
-import {Geist, Geist_Mono} from "next/font/google";
 import "./globals.css";
 import {SessionManager} from "@/components/SessionManager";
 import {Montserrat} from "next/font/google"
 import {Open_Sans} from "next/font/google"
 import "./globals.css"
-import ParallaxWrapper from "@/components/ParallaxWrapper";
 import Link from "next/link";
+import Script from "next/script";
 
 const montserrat = Montserrat({
     subsets: ["latin"],
@@ -39,10 +38,10 @@ export default function RootLayout({
         >
         <div className={'pt-12'}>
             <div className="text-center mb-8">
-                <h1 className="font-serif font-black text-5xl md:text-6xl text-foreground tracking-tight">
+                <a href={'/'} className="font-serif font-black text-5xl md:text-6xl text-foreground tracking-tight">
                     vibe
                     <span className="text-primary">card</span>
-                </h1>
+                </a>
                 <div className="w-24 h-1 bg-gradient-to-r from-foreground to-primary mx-auto mt-2 rounded-full"></div>
             </div>
             <div className={'max-w-2xl mx-auto mt-12'}>
@@ -51,11 +50,13 @@ export default function RootLayout({
                 </SessionManager>
             </div>
 
-            <footer className={'mt-20 text-center text-sm text-gray-500'}>
+            <footer className={'mt-20 mb-12 text-center text-sm text-gray-500'}>
                 <Link href={'/privacy'}>Privacy Policy</Link> | <Link href={'/terms'}>Terms of Service</Link>
             </footer>
         </div>
         </body>
+        <Script src="https://scripts.simpleanalyticscdn.com/latest.js"  />
+
         </html>
     );
 }

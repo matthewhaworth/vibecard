@@ -25,6 +25,7 @@ class CheckoutSessionController extends Controller
         $checkoutSession = $user->checkoutSessions()
             ->where('status', 'pending')
             ->with('postcards')
+            ->with('chosenPostcard')
             ->first();
 
         if (!$checkoutSession) {
@@ -96,9 +97,12 @@ class CheckoutSessionController extends Controller
         \App\Jobs\SendPostcard::dispatch($postcard);
 
         // Update the checkout session status to completed
-        $checkoutSession->update(['status' => 'completed']);
+        $checkoutSession->update([
+            'status' => 'completed',
+            'chosen_postcard_id' => $chosenPostcardId,
+        ]);
 
-        return response()->json($checkoutSession->load('postcards'));
+        return response()->json($checkoutSession->load('postcards', 'chosenPostcard'));
     }
 
     public function createPaymentIntent(Request $request): JsonResponse

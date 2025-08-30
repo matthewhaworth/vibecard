@@ -29,8 +29,6 @@ class SendPostcard implements ShouldQueue
             ->setUsername(config('services.clicksend.username')) // Set your ClickSend username
             ->setPassword(config('services.clicksend.api_key')); // Set your ClickSend API key
 
-        var_dump(config('services.clicksend.username'), config('services.clicksend.api_key'));
-
         $checkoutSession = $this->postcard->checkoutSession;
 
         $apiInstance = new \ClickSend\Api\PostPostcardApi(new \GuzzleHttp\Client(), $config);
@@ -51,6 +49,8 @@ class SendPostcard implements ShouldQueue
         try {
             if ($this->postcard->prompt !== 'test') {
                 $result = $apiInstance->postPostcardsSendPost($postPostcard);
+            } else {
+                $result = 'Test postcard - not sent';
             }
 
             \Log::info('Postcard sent successfully', [
@@ -61,7 +61,7 @@ class SendPostcard implements ShouldQueue
             $checkoutSession->status = 'sent';
             $checkoutSession->save();
         } catch (\Exception $e) {
-            \Log::error('Postcard sent successfully', [
+            \Log::error('Postcard not sent successfully', [
                 'postcard_id' => $this->postcard->id,
                 'result' => $e->getMessage()
             ]);

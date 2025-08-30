@@ -22,4 +22,5 @@ export type CheckoutSession = {
     shipping_name?: string;
     shipping_phone?: string;
     postcards: Postcard[];
+    chosen_postcard_id?: number;
 }
