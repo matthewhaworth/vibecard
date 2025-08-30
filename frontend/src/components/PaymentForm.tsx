@@ -12,6 +12,7 @@ import {
 import { loadStripe } from '@stripe/stripe-js'
 import {fetchPaymentIntent, useCheckoutSession} from '@/utils/hooks'
 import {Button} from "@/components/ui/button";
+import {Loader2Icon} from "lucide-react";
 
 // Initialize Stripe with your publishable key
 // In a real app, this would be an environment variable
