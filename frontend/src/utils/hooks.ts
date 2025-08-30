@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import useSWRMutation from "swr/mutation";
 import {CheckoutSession} from "@/lib/types";
 
-export const LARAVEL_API_URL = process.env.LARAVEL_API_URL || 'http://localhost:8000'
+export const LARAVEL_API_URL = process.env.NEXT_PUBLIC_LARAVEL_API_URL || 'http://localhost:8000'
 
 const fetchUser = async (url: string) => {
     const res = await fetch(`${LARAVEL_API_URL}/${url}`, {
@@ -208,7 +208,7 @@ export const fetchPaymentIntent = async () => {
 export const createPostcard = async (prompt: string) => {
     const csrfToken = await csrf();
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/postcards`, {
+    const response = await fetch(`${LARAVEL_API_URL || 'http://localhost:8000'}/postcards`, {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -225,7 +225,7 @@ export const createPostcard = async (prompt: string) => {
 export const completeOrder = async (sessionId: number, chosenPostcardId: number, message: string) => {
     const csrfToken = await csrf();
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/checkout-complete`, {
+    const response = await fetch(`${LARAVEL_API_URL || 'http://localhost:8000'}/checkout-complete`, {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -257,7 +257,7 @@ export const updateShippingAddress = async (addressData: {
 }) => {
     const csrfToken = await csrf();
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/update-shipping-address`, {
+    const response = await fetch(`${LARAVEL_API_URL || 'http://localhost:8000'}/update-shipping-address`, {
         method: 'POST',
         credentials: 'include',
         headers: {
