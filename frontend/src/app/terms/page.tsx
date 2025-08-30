@@ -1,10 +1,10 @@
 import LegalLayout from '../layouts/LegalLayout'
-import TermsMDX, { title, lastUpdated } from './Terms.mdx'
+import Terms, { title, lastUpdated } from './Terms'
 
 export default function TermsPage() {
     return (
         <LegalLayout title={title} lastUpdated={lastUpdated}>
-            <TermsMDX />
+            <Terms />
         </LegalLayout>
     )
 }
