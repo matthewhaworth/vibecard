@@ -73,23 +73,6 @@ export default function PaymentFormWrapper() {
         <p className="text-sm text-gray-500 mt-1">Includes postcard printing and delivery</p>
       </div>
       
-      <div className="mb-6 flex justify-between items-center px-2">
-        <div className="flex flex-col items-center">
-          <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-sm font-medium">1</div>
-          <p className="text-xs mt-1 text-gray-600">Details</p>
-        </div>
-        <div className="h-1 flex-1 bg-gray-200 mx-2"></div>
-        <div className="flex flex-col items-center">
-          <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-sm font-medium">2</div>
-          <p className="text-xs mt-1 text-gray-600">Payment</p>
-        </div>
-        <div className="h-1 flex-1 bg-gray-200 mx-2"></div>
-        <div className="flex flex-col items-center">
-          <div className="w-8 h-8 rounded-full bg-gray-300 text-white flex items-center justify-center text-sm font-medium">3</div>
-          <p className="text-xs mt-1 text-gray-400">Confirmation</p>
-        </div>
-      </div>
-      
       {clientSecret && (
         <Elements stripe={stripePromise} options={{ clientSecret }}>
           <PaymentForm checkoutSession={checkoutSession} />

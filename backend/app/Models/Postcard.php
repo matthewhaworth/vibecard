@@ -15,6 +15,7 @@ class Postcard extends Model
         'image_url',
         'pdf_url',
         'message',
+        'uuid',
     ];
 
     protected static function booted()

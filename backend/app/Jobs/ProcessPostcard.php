@@ -36,7 +36,7 @@ class ProcessPostcard implements ShouldQueue
     {
         if ($this->postcard->prompt === 'test') {
             $this->postcard->image_url = 'https://vibecard.s3.eu-west-2.amazonaws.com/postcards/6d6a51c9-fe99-4e14-8c8a-41d6353206c0/image.jpeg';
-            $this->postcard->pdf_url = 'https://vibecard.s3.eu-west-2.amazonaws.com/postcards/6d6a51c9-fe99-4e14-8c8a-41d6353206c0/postcard.pdf';
+            $this->postcard->uuid = '6d6a51c9-fe99-4e14-8c8a-41d6353206c0';
             $this->postcard->save();
 
             Log::info('Test postcard processed successfully', [
@@ -145,79 +145,14 @@ class ProcessPostcard implements ShouldQueue
                     throw $e;
                 }
 
-                // Generate PDF with image (A5 landscape)
-                Log::info('Generating PDF', [
-                    'postcard_id' => $this->postcard->id,
-                    'image_url' => $image->toDataUri()
-                ]);
-
-                $pdf = PDF::loadView('pdf.postcard', [
-                    'image_url' => $image->toDataUri(),
-                    'message' => $this->postcard->message,
-                ])->setPaper('a5', 'landscape');
-
-                $pdfContents = $pdf->output();
-                $pdfPath = "postcards/{$uuid}/postcard.pdf";
-
-                Log::info('Attempting to upload PDF to S3', [
-                    'postcard_id' => $this->postcard->id,
-                    'pdf_path' => $pdfPath,
-                    'pdf_size_bytes' => strlen($pdfContents)
-                ]);
-
-                try {
-                    $response = Storage::disk('s3')->put($pdfPath, $pdfContents, 'public');
-
-                    if ($response) {
-                        Log::info('PDF uploaded to S3 successfully', [
-                            'postcard_id' => $this->postcard->id,
-                            'pdf_path' => $pdfPath,
-                            'response' => $response
-                        ]);
-                    } else {
-                        Log::error('S3 PDF upload failed - returned false', [
-                            'postcard_id' => $this->postcard->id,
-                            'pdf_path' => $pdfPath
-                        ]);
-
-                        return;
-                    }
-                } catch (Exception $e) {
-                    Log::error('S3 PDF upload exception', [
-                        'postcard_id' => $this->postcard->id,
-                        'pdf_path' => $pdfPath,
-                        'error' => $e->getMessage(),
-                        'trace' => $e->getTraceAsString()
-                    ]);
-                    throw $e;
-                }
-
-                var_dump($response);
-
-                try {
-                    $pdfS3Url = Storage::disk('s3')->url($pdfPath);
-                    Log::info('Generated S3 PDF URL', [
-                        'postcard_id' => $this->postcard->id,
-                        'pdf_url' => $pdfS3Url
-                    ]);
-                } catch (Exception $e) {
-                    Log::error('Failed to generate S3 PDF URL', [
-                        'postcard_id' => $this->postcard->id,
-                        'pdf_path' => $pdfPath,
-                        'error' => $e->getMessage()
-                    ]);
-                    throw $e;
-                }
-
                 // Save URLs to model
                 $this->postcard->image_url = $imageS3Url;
-                $this->postcard->pdf_url = $pdfS3Url;
+                $this->postcard->uuid = $uuid;
                 $this->postcard->save();
 
                 Log::info('Postcard processing completed successfully', [
                     'postcard_id' => $this->postcard->id,
-                    'image_url' => $imageS3Url,
-                    'pdf_url' => $pdfS3Url
+                    'image_url' => $imageS3Url
                 ]);
             } else {
                 Log::error('No image data received from OpenAI', [
