@@ -147,7 +147,7 @@ class CheckoutSessionController extends Controller
 
             // Create a PaymentIntent with the order amount and currency
             $paymentIntent = $stripe->paymentIntents->create([
-                'amount' => 5005, // Amount in cents (e.g., $10.00)
+                'amount' => 449, // Amount in pence (£4.49)
                 'currency' => 'gbp',
                 'automatic_payment_methods' => [
                     'enabled' => true,

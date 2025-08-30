@@ -63,8 +63,14 @@ export default function PaymentFormWrapper() {
   }
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
+    <div className="max-w-md mx-auto">
       <h1 className="text-2xl font-bold mb-6 text-center">Complete Your Purchase</h1>
+      
+      <div className="mb-6 p-4 bg-gray-50 border border-gray-100 rounded-md text-center">
+        <p className="text-gray-600 mb-1">Total Amount</p>
+        <p className="text-2xl font-semibold text-gray-800">£4.49</p>
+        <p className="text-sm text-gray-500 mt-1">Includes postcard printing and delivery</p>
+      </div>
       
       {clientSecret && (
         <Elements stripe={stripePromise} options={{ clientSecret }}>
@@ -126,19 +132,19 @@ function PaymentForm({ checkoutSession }: { checkoutSession: any }) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="mb-6">
-        <h2 className="text-lg font-semibold mb-2">Shipping Address</h2>
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="p-5 border border-gray-100 rounded-lg bg-white shadow-sm">
+        <h2 className="text-lg font-semibold mb-3 text-gray-800">Shipping Address</h2>
         <AddressElement options={{ mode: 'shipping' }} />
       </div>
       
-      <div className="mb-6">
-        <h2 className="text-lg font-semibold mb-2">Payment Details</h2>
+      <div className="p-5 border border-gray-100 rounded-lg bg-white shadow-sm">
+        <h2 className="text-lg font-semibold mb-3 text-gray-800">Payment Details</h2>
         <PaymentElement />
       </div>
       
       {errorMessage && (
-        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
+        <div className="p-4 bg-red-50 border border-red-100 text-red-700 rounded-md">
           {errorMessage}
         </div>
       )}
@@ -146,10 +152,14 @@ function PaymentForm({ checkoutSession }: { checkoutSession: any }) {
       <Button
         type="submit"
         disabled={!stripe || isProcessing}
-        className="hover:cursor-pointer w-full"
+        className="hover:cursor-pointer w-full py-6 text-lg font-medium transition-transform"
       >
-        {isProcessing ? 'Processing...' : 'Pay Now'}
+        {isProcessing ? 'Processing...' : 'Pay £4.49 Now'}
       </Button>
+      
+      <p className="text-center text-sm text-gray-500 mt-4">
+        Your card will be charged £4.49 upon submission
+      </p>
     </form>
   )
 }

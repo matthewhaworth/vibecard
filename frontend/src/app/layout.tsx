@@ -34,22 +34,22 @@ export default function RootLayout({
     return (
         <html lang="en">
         <body
-            className={`${montserrat.variable} ${openSans.variable} antialiased`}
+            className={`${montserrat.variable} ${openSans.variable} antialiased bg-gradient-to-b from-gray-50 to-white min-h-screen`}
         >
-        <div className={'pt-12'}>
-            <div className="text-center mb-8">
-                <a href={'/'} className="font-serif font-black text-5xl md:text-6xl text-foreground tracking-tight">
-                    <img src={'/logo-1.webp'} alt={'Vibecard Logo'} className={'inline w-48 -mt-2 mr-2'}/>
+        <div className={'pt-12 px-4'}>
+            <div className="text-center mb-10">
+                <a href={'/'} className="font-serif font-black text-5xl md:text-6xl text-foreground tracking-tight transition-transform">
+                    <img src={'/logo-1.webp'} alt={'Vibecard Logo'} className={'inline w-48 -mt-2 mr-2 drop-shadow-sm'}/>
                 </a>
             </div>
-            <div className={'max-w-2xl mx-auto mt-12'}>
+            <div className={'max-w-2xl mx-auto mt-12 bg-white p-6 rounded-lg shadow-sm border border-gray-100'}>
                 <SessionManager>
                     {children}
                 </SessionManager>
             </div>
 
             <footer className={'mt-20 mb-12 text-center text-sm text-gray-500'}>
-                <Link href={'/privacy'}>Privacy Policy</Link> | <Link href={'/terms'}>Terms of Service</Link>
+                <Link href={'/privacy'} className="hover:text-gray-700 transition-colors">Privacy Policy</Link> | <Link href={'/terms'} className="hover:text-gray-700 transition-colors">Terms of Service</Link>
             </footer>
         </div>
         </body>
