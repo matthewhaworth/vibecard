@@ -39,10 +39,8 @@ export default function RootLayout({
         <div className={'pt-12'}>
             <div className="text-center mb-8">
                 <a href={'/'} className="font-serif font-black text-5xl md:text-6xl text-foreground tracking-tight">
-                    vibe
-                    <span className="text-primary">card</span>
+                    <img src={'/logo-1.webp'} alt={'Vibecard Logo'} className={'inline w-48 -mt-2 mr-2'}/>
                 </a>
-                <div className="w-24 h-1 bg-gradient-to-r from-foreground to-primary mx-auto mt-2 rounded-full"></div>
             </div>
             <div className={'max-w-2xl mx-auto mt-12'}>
                 <SessionManager>
