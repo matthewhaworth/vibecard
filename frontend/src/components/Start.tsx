@@ -70,7 +70,7 @@ export default function Start() {
                     id="prompt" 
                     name="prompt" 
                     value={prompt}
-                    placeholder="E.g., A serene beach sunset with palm trees and gentle waves..."
+                    placeholder="E.g., A few friends in their 30s gather at a bar, but one friend has been told that it's fancy dress. Everyone is laughing at them. Make it say 'happy birthday' at the bottom right"
                     className="min-h-[100px] transition-all focus:ring-2 focus:ring-blue-100"
                     onChange={(prompt) => setPrompt(prompt.target.value)} 
                     required 

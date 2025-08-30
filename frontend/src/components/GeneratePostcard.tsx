@@ -107,18 +107,21 @@ export default function GeneratePostcard() {
     
     return (
         <div className="container mx-auto p-6">
-            <h1 className="text-2xl font-bold mb-6">Your Postcards</h1>
+            <h1 className="text-2xl font-bold mb-6">Choose a Postcard to Send</h1>
             
             {checkoutSession.postcards.length === 0 ? (
                 <div className="text-center p-6 bg-gray-100 rounded-lg">
                     <p className="mb-4">You haven't created any postcards yet.</p>
+                    <p className="text-sm text-gray-600">Create your first postcard below to get started.</p>
                 </div>
             ) : (
                 <div className="flex flex-col gap-6 mb-8">
+                    <p className="text-gray-700 font-medium">Select one of your postcards below to continue:</p>
                     {checkoutSession.postcards.map((postcard: any) => (
                         <div 
                             key={postcard.id} 
-                            className={`border rounded-lg overflow-hidden shadow-md ${selectedPostcardId === postcard.id ? 'ring-2 ring-blue-500' : ''}`}
+                            onClick={() => handleSelectPostcard(postcard.id)}
+                            className={`border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow cursor-pointer ${selectedPostcardId === postcard.id ? 'ring-2 ring-blue-500' : ''}`}
                         >
                             {postcard.image_url ? (
                                 <img 
@@ -134,13 +137,16 @@ export default function GeneratePostcard() {
                             
                             <div className="p-4">
                                 <Button
-                                    onClick={() => handleSelectPostcard(postcard.id)}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleSelectPostcard(postcard.id);
+                                    }}
                                     variant={selectedPostcardId === postcard.id ? "default" : "outline"}
                                     className="w-full mt-2 hover:cursor-pointer"
                                 >
                                     {selectedPostcardId === postcard.id 
-                                        ? "Selected" 
-                                        : "Send this postcard to your address"}
+                                        ? "Selected ✓" 
+                                        : "Choose this postcard"}
                                 </Button>
                             </div>
                         </div>
@@ -149,38 +155,53 @@ export default function GeneratePostcard() {
             )}
             
             {canCreateMorePostcards && (
-                <div className="border border-dashed border-gray-300 rounded-lg mb-6 overflow-hidden">
-                    <div className="w-full h-64 bg-white z-50 flex flex-col items-center justify-center p-6">
-                        <h2 className="text-xl font-semibold mb-4">Create a New Postcard</h2>
-                        <div className="w-full max-w-md">
-                            <Label htmlFor="prompt" className="mb-2 block">Enter a prompt for your postcard:</Label>
-                            <Textarea
-                                id="prompt"
-                                value={prompt}
-                                onChange={(e) => setPrompt(e.target.value)}
-                                placeholder="Describe what you'd like to see on your postcard..."
-                                className="w-full"
-                                rows={3}
-                            />
-                            <Button 
-                                onClick={handleCreatePostcard} 
-                                disabled={!prompt.trim() || isLoading}
-                                className="w-full mt-4 hover:cursor-pointer"
-                            >
-                                {isLoading ? (
-                                    <>
-                                        <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
-                                        Creating...
-                                    </>
-                                ) : (
-                                    'Create Postcard'
-                                )}
-                            </Button>
-                            <p className="text-sm text-gray-500 mt-2 text-center">
-                                You can create up to {4 - checkoutSession.postcards.length} more postcards.
-                            </p>
+                <div className="mt-8 mb-6">
+                    <details className="group">
+                        <summary className="flex items-center justify-center gap-2 cursor-pointer list-none text-sm font-medium text-gray-600 hover:text-gray-800 transition-colors">
+                            <span className="flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                                Create another postcard option
+                            </span>
+                            <span className="text-xs text-gray-500">
+                                (You can create up to {4 - checkoutSession.postcards.length} more)
+                            </span>
+                        </summary>
+                        
+                        <div className="mt-4 border border-dashed border-gray-300 rounded-lg overflow-hidden bg-gray-50">
+                            <div className="w-full p-6 flex flex-col items-center justify-center">
+                                <h2 className="text-lg font-medium mb-4 text-gray-700">Generate a new postcard design</h2>
+                                <div className="w-full max-w-md">
+                                    <Label htmlFor="prompt" className="mb-2 block text-sm">Enter a prompt for your postcard:</Label>
+                                    <Textarea
+                                        id="prompt"
+                                        value={prompt}
+                                        onChange={(e) => setPrompt(e.target.value)}
+                                        placeholder="Describe what you'd like to see on your postcard..."
+                                        className="w-full"
+                                        rows={3}
+                                    />
+                                    <Button 
+                                        onClick={handleCreatePostcard} 
+                                        disabled={!prompt.trim() || isLoading}
+                                        className="w-full mt-4 hover:cursor-pointer"
+                                        variant="outline"
+                                    >
+                                        {isLoading ? (
+                                            <>
+                                                <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+                                                Creating...
+                                            </>
+                                        ) : (
+                                            'Generate New Design'
+                                        )}
+                                    </Button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    </details>
                 </div>
             )}
             
@@ -334,16 +355,35 @@ export default function GeneratePostcard() {
                             </div>
                         </>
                     )}
-                    <div>
+                    <div className="mt-6">
+                        {selectedPostcardId === null ? (
+                            <div className="bg-amber-50 p-4 rounded-lg mb-4 text-amber-800 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                </svg>
+                                Please select a postcard above to continue
+                            </div>
+                        ) : (
+                            <div className="bg-green-50 p-4 rounded-lg mb-4 text-green-800 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                </svg>
+                                Postcard selected! You can now continue
+                            </div>
+                        )}
                         <Button 
                             onClick={handleSendPostcard} 
                             disabled={selectedPostcardId === null}
-                            className={'hover:cursor-pointer'}
+                            className={'hover:cursor-pointer w-full md:w-auto px-8'}
                             size="lg"
+                            variant={selectedPostcardId === null ? "outline" : "default"}
                         >
                             {selectedPostcardId === null 
-                                ? "Select a postcard to continue" 
-                                : "Continue with selected postcard"}
+                                ? "Choose a postcard first" 
+                                : "Continue with selected postcard →"}
                         </Button>
                     </div>
                 </div>
