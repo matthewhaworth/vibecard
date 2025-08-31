@@ -77,7 +77,7 @@ export default function Start() {
                             type="email"
                             value={email}
                             placeholder="your@email.com"
-                            className="transition-all focus:ring-2 focus:ring-blue-100"
+                            className="transition-all focus:ring-2 focus:ring-blue-100 mb-4"
                             onChange={(email) => setEmail(email.target.value)}
                             required
                         />
