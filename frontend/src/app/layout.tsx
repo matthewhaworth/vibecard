@@ -37,16 +37,15 @@ export default function RootLayout({
             className={`${montserrat.variable} ${openSans.variable} antialiased bg-gradient-to-b from-gray-50 to-white min-h-screen`}
         >
         <div className={'pt-10 px-4 sm:px-6'}>
-            <div className="text-center mb-6">
-                <a href={'/'} className="font-serif font-black text-5xl md:text-6xl text-foreground tracking-tight transition-transform hover:scale-105">
-                    <img src={'/logo-1.webp'} alt={'Vibecard Logo'} className={'inline w-40 sm:w-48 -mt-2 mr-2 drop-shadow-md'}/>
-                </a>
+            <div className="text-center">
+                <Link href={'/'} className="font-serif font-black text-5xl md:text-6xl text-foreground tracking-tight">
+                    <img src={'/logo-1.webp'} alt={'Vibecard Logo'} className={'inline w-36 sm:w-40 -mt-2 mr-2 drop-shadow-md'}/>
+                </Link>
             </div>
-            <div className={'max-w-2xl mx-auto mt-8 bg-white p-5 sm:p-6 rounded-lg shadow-sm border border-gray-100'}>
-                <SessionManager>
-                    {children}
-                </SessionManager>
-            </div>
+
+            <SessionManager>
+                {children}
+            </SessionManager>
 
             <footer className={'mt-20 mb-12 text-center text-sm text-gray-500'}>
                 <Link href={'/privacy'} className="hover:text-gray-700 transition-colors">Privacy Policy</Link> | <Link href={'/terms'} className="hover:text-gray-700 transition-colors">Terms of Service</Link>

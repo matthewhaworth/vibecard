@@ -8,6 +8,8 @@ import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {Loader2Icon} from "lucide-react";
 import {Textarea} from "@/components/ui/textarea";
+import {Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious} from "@/components/ui/carousel";
+import Image from "next/image";
 
 export default function Start() {
     const [email, setEmail] = useState('');
@@ -45,79 +47,100 @@ export default function Start() {
     }
 
     return (
-        <form className={'flex flex-col gap-5'}>
-            <div className="space-y-1.5">
-                <h2 className="text-xl font-semibold text-center mb-4">Create Your AI Postcard</h2>
-                {!user && <>
-                    <Label htmlFor="email" className="text-sm font-medium">Email Address:</Label>
-                    <Input 
-                        id="email" 
-                        name="email" 
-                        type="email" 
-                        value={email}
-                        placeholder="your@email.com"
-                        className="transition-all focus:ring-2 focus:ring-blue-100"
-                        onChange={(email) => setEmail(email.target.value)} 
-                        required 
-                    />
-                </>}
+        <>
+            <div className="max-w-2xl mx-auto mt-2">
+                <h2 className="text-2xl font-bold text-center mb-4">Design with AI. Delivered by Mail.</h2>
+                <Carousel>
+                    <CarouselContent>
+                        <CarouselItem>
+                            <Image width={'1536'} height={'1024'} src={'/cards/postcard-prank.png'} alt={'postcard prank'} />
+                        </CarouselItem>
+                        <CarouselItem>
+                            <Image width={'1536'} height={'1024'}  src={'/cards/postcard-proposal.png'} alt={'postcard for a proposal'} />
+                        </CarouselItem>
+                        <CarouselItem>
+                            <Image width={'1536'} height={'1024'}  src={'/cards/postcard-fathers.png'} alt={'postcard for fathers day'} />
+                        </CarouselItem>
+                    </CarouselContent>
+                    <CarouselPrevious />
+                    <CarouselNext />
+                </Carousel>
             </div>
-
-            <div className="space-y-1.5">
-                <Label htmlFor="prompt" className="text-sm font-medium">Describe Your Postcard:</Label>
-                <p className="text-xs text-gray-500 mb-1">Be descriptive about what you'd like to see on your postcard</p>
-                <Textarea 
-                    id="prompt" 
-                    name="prompt" 
-                    value={prompt}
-                    placeholder="E.g., A few friends in their 30s gather at a bar, one friend has been told that it's fancy dress. It isn't. Everyone is laughing at them. Make it say 'Happy birthday Gary' at the bottom right."
-                    className="min-h-[100px] transition-all focus:ring-2 focus:ring-blue-100"
-                    onChange={(prompt) => setPrompt(prompt.target.value)} 
-                    required 
-                />
-            </div>
-
-            {hasRequestedOtp && <div className="space-y-3 mt-2 p-4 bg-blue-50 rounded-lg border border-blue-100 text-center">
-                <div className="text-center">
-                    <h3 className="text-sm font-medium text-blue-800 mb-1">Verification Code</h3>
-                    <p className="text-xs text-blue-600 mb-3">We've sent a 6-digit code to your email</p>
+            <div className={'max-w-2xl mx-auto mt-8 bg-white p-5 sm:p-6 rounded-lg shadow-sm border border-gray-100'}>
+                <form className={'flex flex-col'}>
+                <div className="space-y-1.5">
+                    {!user && <>
+                        <Label htmlFor="email" className="text-sm font-medium">Your Email Address</Label>
+                        <Input
+                            id="email"
+                            name="email"
+                            type="email"
+                            value={email}
+                            placeholder="your@email.com"
+                            className="transition-all focus:ring-2 focus:ring-blue-100"
+                            onChange={(email) => setEmail(email.target.value)}
+                            required
+                        />
+                    </>}
                 </div>
-                <InputOTP
-                    maxLength={6}
-                    value={oneTimePassword}
-                    onChange={(value) => setOneTimePassword(value)}
-                    className="justify-center"
-                >
-                    <InputOTPGroup className={'mx-auto'}>
-                        <InputOTPSlot index={0} className="transition-all border-gray-300 focus:border-blue-500" />
-                        <InputOTPSlot index={1} className="transition-all border-gray-300 focus:border-blue-500" />
-                        <InputOTPSlot index={2} className="transition-all border-gray-300 focus:border-blue-500" />
-                        <InputOTPSlot index={3} className="transition-all border-gray-300 focus:border-blue-500" />
-                        <InputOTPSlot index={4} className="transition-all border-gray-300 focus:border-blue-500" />
-                        <InputOTPSlot index={5} className="transition-all border-gray-300 focus:border-blue-500" />
-                    </InputOTPGroup>
-                </InputOTP>
-            </div>}
 
-            <div className="mt-4">
-                {(!hasRequestedOtp && !user) && <Button
-                    className="w-full py-5 text-base font-medium transition-transform hover:cursor-pointer"
-                    type='button'
-                    disabled={(!user && !email.trim()) || !prompt.trim() || isUserLoading || isCustomerSessionLoading}
-                    onClick={() => onRequestOtp(email)}>
-                    {(isUserLoading || isCustomerSessionLoading) ?
-                        <><Loader2Icon className="animate-spin mr-2" /> Please wait</> : 'Continue'}
-                </Button>}
+                <div className="space-y-1.5">
+                    <Label htmlFor="prompt" className="text-sm font-medium">Describe Your Postcard</Label>
+                    <p className="text-xs text-gray-500 mb-1">Be descriptive about what you'd like to see on your postcard</p>
+                    <Textarea
+                        id="prompt"
+                        name="prompt"
+                        value={prompt}
+                        placeholder="E.g., A few friends in their 30s gather at a bar, one friend has been told that it's fancy dress. It isn't. Everyone is laughing at them. Make it say 'Happy birthday Gary' at the bottom right."
+                        className="min-h-[100px] transition-all focus:ring-2 focus:ring-blue-100"
+                        onChange={(prompt) => setPrompt(prompt.target.value)}
+                        required
+                    />
+                </div>
 
-                {(hasRequestedOtp || user) && <Button
-                    className="w-full py-5 text-base font-medium transition-transform hover:cursor-pointer"
-                    type='button'
-                    disabled={isUserLoading || isCustomerSessionLoading || (!user && oneTimePassword.length !== 6)}
-                    onClick={user ? () => onContinueLoggedIn() : () => onContinueLoggedOut()}>
-                    {(isUserLoading || isCustomerSessionLoading) ?
-                        <><Loader2Icon className="animate-spin mr-2" /> Please wait</> : user ? 'Create My Postcard' : 'Verify & Continue'}
-                </Button>}
+                {hasRequestedOtp && <div className="space-y-3 mt-2 p-4 bg-blue-50 rounded-lg border border-blue-100 text-center">
+                    <div className="text-center">
+                        <h3 className="text-sm font-medium text-blue-800 mb-1">Verification Code</h3>
+                        <p className="text-xs text-blue-600 mb-3">We've sent a 6-digit code to your email</p>
+                    </div>
+                    <InputOTP
+                        maxLength={6}
+                        value={oneTimePassword}
+                        onChange={(value) => setOneTimePassword(value)}
+                        className="justify-center"
+                    >
+                        <InputOTPGroup className={'mx-auto'}>
+                            <InputOTPSlot index={0} className="transition-all border-gray-300 focus:border-blue-500" />
+                            <InputOTPSlot index={1} className="transition-all border-gray-300 focus:border-blue-500" />
+                            <InputOTPSlot index={2} className="transition-all border-gray-300 focus:border-blue-500" />
+                            <InputOTPSlot index={3} className="transition-all border-gray-300 focus:border-blue-500" />
+                            <InputOTPSlot index={4} className="transition-all border-gray-300 focus:border-blue-500" />
+                            <InputOTPSlot index={5} className="transition-all border-gray-300 focus:border-blue-500" />
+                        </InputOTPGroup>
+                    </InputOTP>
+                </div>}
+
+                <div className="mt-4">
+                    {(!hasRequestedOtp && !user) && <Button
+                        className="w-full py-5 text-base font-medium transition-transform hover:cursor-pointer"
+                        type='button'
+                        disabled={(!user && !email.trim()) || !prompt.trim() || isUserLoading || isCustomerSessionLoading}
+                        onClick={() => onRequestOtp(email)}>
+                        {(isUserLoading || isCustomerSessionLoading) ?
+                            <><Loader2Icon className="animate-spin mr-2" /> Please wait</> : 'Continue'}
+                    </Button>}
+
+                    {(hasRequestedOtp || user) && <Button
+                        className="w-full py-5 text-base font-medium transition-transform hover:cursor-pointer"
+                        type='button'
+                        disabled={isUserLoading || isCustomerSessionLoading || (!user && oneTimePassword.length !== 6)}
+                        onClick={user ? () => onContinueLoggedIn() : () => onContinueLoggedOut()}>
+                        {(isUserLoading || isCustomerSessionLoading) ?
+                            <><Loader2Icon className="animate-spin mr-2" /> Please wait</> : user ? 'Create My Postcard' : 'Verify & Continue'}
+                    </Button>}
+                </div>
+            </form>
             </div>
-        </form>
+        </>
     )
 }

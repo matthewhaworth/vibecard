@@ -64,9 +64,8 @@ export default function PaymentFormWrapper() {
   }
 
   return (
-    <div className="max-w-md mx-auto">
-      <h1 className="text-2xl font-bold mb-4 text-center">Complete Your Purchase</h1>
-      
+    <div className={'max-w-2xl mx-auto mt-2 p-5 sm:p-6 '}>
+
       <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-md text-center shadow-sm">
         <p className="text-gray-600 mb-1">Total Amount</p>
         <p className="text-2xl font-semibold text-gray-800">£4.49</p>
@@ -136,7 +135,6 @@ function PaymentForm({ checkoutSession }: { checkoutSession: any }) {
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="p-5 border border-gray-100 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow">
         <div className="flex items-center mb-3">
-          <div className="w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs font-medium mr-2">1</div>
           <h2 className="text-lg font-semibold text-gray-800">Shipping Address</h2>
         </div>
         <p className="text-xs text-gray-500 mb-3">Enter the address where you'd like your postcard delivered</p>
@@ -145,7 +143,6 @@ function PaymentForm({ checkoutSession }: { checkoutSession: any }) {
       
       <div className="p-5 border border-gray-100 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow">
         <div className="flex items-center mb-3">
-          <div className="w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs font-medium mr-2">2</div>
           <h2 className="text-lg font-semibold text-gray-800">Payment Details</h2>
         </div>
         <p className="text-xs text-gray-500 mb-3">Secure payment processing by Stripe</p>
@@ -161,7 +158,7 @@ function PaymentForm({ checkoutSession }: { checkoutSession: any }) {
       <Button
         type="submit"
         disabled={!stripe || isProcessing}
-        className="hover:cursor-pointer w-full py-6 text-lg font-medium transition-transform hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700"
+        className="hover:cursor-pointer w-full py-6 text-lg font-medium "
       >
         {isProcessing ? 
           <><Loader2Icon className="animate-spin mr-2" /> Processing...</> : 

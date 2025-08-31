@@ -55,8 +55,8 @@ export default function PostcardPreview() {
     }
 
     return (
-        <div className="flex flex-col items-center p-6">
-            <h1 className="text-2xl font-bold mb-6">Postcard Preview</h1>
+        <div className={'max-w-2xl mx-auto mt-2  p-5 sm:p-6 text-center'}>
+            <h1 className="text-2xl font-bold mb-6">Your Postcard</h1>
             {postcard.image_url ? (
                 <>
                     <div className="mb-6">

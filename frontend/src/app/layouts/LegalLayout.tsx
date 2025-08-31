@@ -9,7 +9,7 @@ interface LegalLayoutProps {
 
 export default function LegalLayout({ children, title, lastUpdated }: LegalLayoutProps) {
     return (
-        <div className="bg-white min-h-screen">
+        <div className=" min-h-screen">
             <div className="max-w-3xl mx-auto py-12 px-6">
                 {/* Page title */}
                 <h1 className="text-4xl font-bold mb-2">{title}</h1>

@@ -106,7 +106,7 @@ export default function GeneratePostcard() {
     const canCreateMorePostcards = checkoutSession.postcards.length < 4
     
     return (
-        <div className="container mx-auto p-6">
+        <div className={'max-w-2xl mx-auto mt-8 bg-white p-5 sm:p-6 rounded-lg shadow-sm border border-gray-100'}>
             <h1 className="text-2xl font-bold mb-6">Choose a Postcard to Send</h1>
             
             {checkoutSession.postcards.length === 0 ? (
@@ -157,7 +157,7 @@ export default function GeneratePostcard() {
             {canCreateMorePostcards && (
                 <div className="mt-8 mb-6">
                     <details className="group">
-                        <summary className="flex items-center justify-center gap-2 cursor-pointer list-none text-sm font-medium text-gray-600 hover:text-gray-800 transition-colors">
+                        <summary className="flex flex-col sm:flex-row items-center justify-center gap-2 cursor-pointer list-none text-sm font-medium text-gray-600 hover:text-gray-800 transition-colors">
                             <span className="flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
                                     <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -166,7 +166,7 @@ export default function GeneratePostcard() {
                                 Create another postcard option
                             </span>
                             <span className="text-xs text-gray-500">
-                                (You can create up to {4 - checkoutSession.postcards.length} more)
+                                ({4 - checkoutSession.postcards.length} more included)
                             </span>
                         </summary>
                         

@@ -28,8 +28,8 @@ export default function Complete() {
     }
 
     return (
-        <div className="container mx-auto p-6 max-w-2xl">
-            <div className="flex flex-col items-center text-center mb-8">
+        <div className={'max-w-2xl mx-auto mt-8 bg-white p-5 sm:p-6 rounded-lg shadow-sm border border-gray-100'}>
+         <div className="flex flex-col items-center text-center mb-8">
                 <div className="bg-green-100 p-4 rounded-full mb-4">
                     <CheckCircle2 className="h-16 w-16 text-green-600" />
                 </div>
