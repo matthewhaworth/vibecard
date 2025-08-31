@@ -62,8 +62,8 @@ export default function Start() {
                             <Image width={'1536'} height={'1024'}  src={'/cards/postcard-fathers.png'} alt={'postcard for fathers day'} />
                         </CarouselItem>
                     </CarouselContent>
-                    <CarouselPrevious />
-                    <CarouselNext />
+                    <CarouselPrevious className={'hidden'} />
+                    <CarouselNext className={'hidden'} />
                 </Carousel>
             </div>
             <div className={'max-w-2xl mx-auto mt-8 bg-white p-5 sm:p-6 rounded-lg shadow-sm border border-gray-100'}>
