@@ -10,6 +10,7 @@ import {Loader2Icon} from "lucide-react";
 import {Textarea} from "@/components/ui/textarea";
 import {Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious} from "@/components/ui/carousel";
 import Image from "next/image";
+import Autoplay from "embla-carousel-autoplay";
 
 export default function Start() {
     const [email, setEmail] = useState('');
@@ -50,7 +51,11 @@ export default function Start() {
         <>
             <div className="max-w-2xl mx-auto mt-2">
                 <h2 className="text-2xl font-bold text-center mb-4">Design with AI. Delivered by Mail.</h2>
-                <Carousel>
+                <Carousel plugins={[
+                    Autoplay({
+                        delay: 3000,
+                    }),
+                ]}>
                     <CarouselContent>
                         <CarouselItem>
                             <Image width={'1536'} height={'1024'} src={'/cards/postcard-prank.png'} alt={'postcard prank'} />
