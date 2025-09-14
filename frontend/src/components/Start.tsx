@@ -51,7 +51,7 @@ export default function Start() {
         <>
             <div className="max-w-2xl mx-auto mt-2">
                 <h1 className="text-3xl font-bold text-balance mb-6 text-center">
-                    Design with AI. <span className="text-orange-600">Delivered by Mail.</span>
+                    Design with AI. <span className="text-orange-600">Delivered by Post.</span>
                 </h1>
                 <p className={'text-lg text-center text-muted-foreground text-balance mb-8 max-w-2xl mx-auto'}>
                     Create personalised postcards in seconds using AI. Describe a scene that is truly unique to you, your family, your friends
